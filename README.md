@@ -60,6 +60,7 @@ urlpatterns = [
 - Menjalankan git push origin main, git add . , git commit -m "message", dan git push -u origin main untuk update github repository agar sesuai dengan local repository
 
 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html.
+![](https://github.com/sarahsaphira/cookies-store/blob/1b0f33067c635ff55e09f6e077944304a335bbb5/BaganNomor2.png)
 
 - Client mengirim request ke Internet -> forward ke Python/Django -> forward ke urls.py -> forward ke views.py untuk memproses url -> read/write data dari/ke models.py dan database -> input/display data dari/ke templates -> return html file yang telah dimerge dengan value-value yang diinginkan -> proses ke internet -> display ke client's device
 
