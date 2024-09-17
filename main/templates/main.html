@@ -1,8 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
 <h1>🍪 Cookies Store 🍪</h1>
 
-<h5>Nama: </h5>
-<p>{{ name }}<p>
 <h5>NPM: </h5>
 <p>{{ npm }}<p>
-<h5>Class: </h5>
-<p>{{ class }}<p>
+
+<h5>Name:</h5>
+<p>{{ name }}</p>
+
+<h5>Class:</h5>
+<p>{{ class }}</p>
+
+{% if not products %}
+<p>Belum ada data product pada cookies store.</p>
+{% else %}
+<table>
+  <tr>
+    <th>Product Name</th>
+    <th>Description</th>
+    <th>Price</th>
+  </tr>
+
+  {% comment %} Berikut cara memperlihatkan data product di bawah baris ini 
+  {% endcomment %} 
+  {% for product in products %}
+  <tr>
+    <td>{{product.name}}</td>
+    <td>{{product.description}}</td>
+    <td>{{product.price}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'main:create_product' %}">
+  <button>Add New Product</button>
+</a>
+{% endblock content %}
