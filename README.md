@@ -256,7 +256,8 @@ Selain itu, Django mengikuti prinsip "batteries included", yang berarti banyak k
 Django juga mengedepankan praktik pengembangan yang baik, seperti pembagian tugas antara bagian yang mengatur logika (views), data (models), dan tampilan (templates) melalui arsitektur Model-View-Template (MVT). Dengan pendekatan ini, pengembang belajar cara mengorganisasi kode dengan baik dari awal.
 
 5. Mengapa model pada Django disebut sebagai ORM?
-- Model dalam Django disebut ORM (Object-Relational Mapping) karena memungkinkan kita bekerja dengan data di database menggunakan objek Python, tanpa harus menulis perintah SQL secara langsung. Django ORM menghubungkan objek Python dengan tabel di database relasional.
+
+Model dalam Django disebut ORM (Object-Relational Mapping) karena memungkinkan kita bekerja dengan data di database menggunakan objek Python, tanpa harus menulis perintah SQL secara langsung. Django ORM menghubungkan objek Python dengan tabel di database relasional.
 
 Jadi, saat kita membuat model di Django, misalnya model Product, Django akan mengubahnya menjadi tabel product di database, dan setiap atribut dari model tersebut akan menjadi kolom di tabel. ORM mempermudah kita untuk mengambil, menyimpan, atau mengubah data hanya dengan menggunakan metode pada objek Python, tanpa perlu berurusan dengan query SQL yang kompleks.
 
