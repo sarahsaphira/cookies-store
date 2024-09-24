@@ -1,3 +1,109 @@
+# TUGAS INDIVIDU 4
+1. Apa perbedaan antara HttpResponseRedirect() dan redirect()
+
+2. Jelaskan cara kerja penghubungan model MoodEntry dengan User!
+
+3. Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
+
+
+4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
+
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+- Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
+- Tambahkan kode berikut ke main/views.py
+```html
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+
+def login_user(request):
+   if request.method == 'POST':
+      form = AuthenticationForm(data=request.POST)
+
+      if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_main"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+
+   else:
+      form = AuthenticationForm(request)
+   context = {'form': form}
+   return render(request, 'login.html', context)
+
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+```
+- response.setcookie('last_login', str(datetime.datetime.now())) digunakan untuk menyimpan waktu terakhir user yang bersangkutan login pada cookie
+- Tambahkan 'last_login': request.COOKIES['last_login'], pada context di views.py untuk mengakses cookie last_login
+- Tambahkan @login_required(login_url='/login') di atas function show_main pada views.py untuk memastikan hanya logged in user yang bisa akses
+- Tambahkan potongan kode berikut pada urls.py untuk handle routing:
+```html
+path('register/', register, name='register'),
+path('login/', login_user, name='login'),
+path('logout/', logout_user, name='logout'),
+```
+- Buat template yang akan digunakan untuk masing-masing routing dari views.py (klik untuk mengakses):
+[register.html]()
+[main.html]()
+[login.html]()
+- Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+- Buka localhost:8000 dan register untuk 2 username dengan username yang berbeda dan password
+- Login ntuk kedua user tersebut, kemudian buat 3 product/item baru dengan klik tombol Add New Product dan isi seluruh detail product yang diinginkan
+- Setelah selesai coba cek apakah product yang ditambahkan sudah ada di tabel
+- Apabila sudah benar, seharusnya setiap user memiliki tabel dengan isi product yang berbeda-beda
+-  Menghubungkan model Item dengan User.
+- Tambahkan user = models.ForeignKey(User, on_delete=models.CASCADE) pada class Product di models.py untuk initiate Many to One relationship (karena menggunakan ForeignKey) pada User dengan Product/Item.
+- Ubah views.py pada bagian:
+```html
+def create_product(request):
+form = ProductForm(request.POST or None)
+
+if form.is_valid() and request.method == "POST":
+    product = form.save(commit=False)
+    product.user = request.user
+    product.save()
+    return redirect('main:show_main')
+```
+- Tambahkan products = Product.objects.filter(user=request.user) dan ubah context untuk key 'name'
+```html
+def show_main(request):
+products = Product.objects.filter(user=request.user)
+
+context = {
+    'name': request.user.username,
+    ...
+}
+```
+- Lakukan migration untuk menyimpan perubahan
+- Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
+- Untuk menampilkan username dapat menggunakan potongan kode berikut pada main.html:
+```html
+<p>{{ name }}</p>
+```
+- Untuk menampilkan data last login user dapat memanfaatkan Cookies dengan menggunakan potongan kode berikut pada main.html:
+```html
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+```
+- Untuk mengimplementasikan cookiesnya sebagai berikut:
+- response.set_cookie('last_login', str(datetime.datetime.now())) pada function login_user di views.py untuk set cookie kapan user login terakhir kali
+- response.delete_cookie('last_login') pada function logout_user di views.py untuk menghapus cookie
+- 'last_login': request.COOKIES['last_login'], pada context function show_main di views.py
+
 # TUGAS INDIVIDU 3
 
 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
